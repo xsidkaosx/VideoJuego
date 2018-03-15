@@ -100,7 +100,45 @@ div[class^='col']{
 }
 
 .elemento{
-  width: 99.4px;
+  transition: all 3s ease;
+  width:  99.4px;
   height: 96px;
 
+}
+
+.panel-score {
+  transition: width 1s ease-in-out;
+}
+.panel-tablero{
+  /*transition: width 1s ease-in-out;*/
+}
+
+.animacion {
+  animation-name: parpadeo;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  -webkit-animation-name:parpadeo;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+}
+
+@-moz-keyframes parpadeo{
+  0% { opacity: 1.0; }
+  50% { opacity: 0.0; }
+  100% { opacity: 1.0; }
+}
+
+@-webkit-keyframes parpadeo {
+  0% { opacity: 1.0; }
+  50% { opacity: 0.0; }
+   100% { opacity: 1.0; }
+}
+
+@keyframes parpadeo {
+  0% { opacity: 1.0; }
+   50% { opacity: 0.0; }
+  100% { opacity: 1.0; }
 }
