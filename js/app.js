@@ -11,6 +11,8 @@ var movimientos = 0;
 var score = 0;
 var tablero = [];
 var seal = null;
+var banderaF = false;
+var banderaC = false;
 var interval;
 var Tablero = {
 
@@ -30,15 +32,13 @@ var Tablero = {
     // Validar elementos
     this.validarColumnas();
     this.validarFilas();
-    interval = setInterval(seal.AgregarFichas, 5000)
-    console.log(tablero);
+    interval = setInterval(seal.agregarFichas, 1000);
   },
   agrEventos: function(elemento){
     var seal = this;
     $(elemento).draggable({ grid: [ 130, 100 ], revert: "invalid", snap: ".elemento", snapMode: "inner", zIndex:9, helper: "clone", cursor:"move"  });
     $(elemento).droppable({
       drop: function(event, ui ) {
-        //console.log(ui.draggable,this);
         movimientos++;
         $('#movimientos-text').html(movimientos);
         var idItemA = ui.draggable.attr('id');
@@ -55,15 +55,11 @@ var Tablero = {
         tablero[posItemA[0]][posItemA[1]] = $(this);
         tablero[posItemB[0]][posItemB[1]] = dragElem;
 
-        //console.log(tablero);
-
         seal.agrEventos(this);
         seal.agrEventos(dragElem);
         // Validar elementos
         seal.validarColumnas();
         seal.validarFilas();
-
-        //seal.validarMov(this);
       }
     });
   },
@@ -89,9 +85,6 @@ var Tablero = {
             var oB3 = tmpNext.attr('data-item');
 
             if(oB1 == oB2 && oB1 == oB3){
-              //actual.css('background-color','gray');
-              //tmpPrev.css('background-color','gray');
-              //tmpNext.css('background-color','gray');
               score += 100;
               $('#score-text').html(score);
               this.removerElementos(tmpPrev);
@@ -99,14 +92,12 @@ var Tablero = {
               this.removerElementos(tmpNext);
             }
           }
-          //console.log("----------");
-          //console.log(tmpPrev,actual,tmpNext);
         }
-        //console.log("******");
     }
-
+    banderaC = true;
   },
   validarFilas: function(){
+    var banderaRemover = false;
     for (var i = 0; i < columnas; i++) {
       var tmpPrev,tmpNext = null
       for (var j = 0; j < filas; j++) {
@@ -128,23 +119,19 @@ var Tablero = {
             var oB3 = tmpNext.attr('data-item');
 
             if(oB1 == oB2 && oB1 == oB3){
-              //actual.css('background-color','gray');
-              //tmpPrev.css('background-color','gray');
-              //tmpNext.css('background-color','gray');
               score += 100;
+              banderaRemover = true;
               $('#score-text').html(score);
               this.removerElementos(tmpPrev);
               this.removerElementos(actual);
               this.removerElementos(tmpNext);
             }
           }
-          //console.log("----------");a
-          //console.log(tmpPrev,actual,tmpNext);
         }
-        //console.log("******");
     }
+    banderaF =true;
   },
-  removerElementos: function(elemento) {
+  removerElementos: function(elemento,bandera) {
       elemento
         .animate(
           {
@@ -153,7 +140,7 @@ var Tablero = {
             step: function(now, fx){
               $(this).addClass('animacion');
             },
-            duration: 3000,
+            duration: 2000,
             complete: function() {
               $(this).removeClass('animacion');
               $(this).remove();
@@ -162,36 +149,35 @@ var Tablero = {
         )
 
   },
-  AgregarFichas: function(){
-    clearInterval(interval);
-      for (var j = 0; j < columnas; j++) {
-        var col = $('.col-'+(j+1)+' > img');
-        for (var i = col.length; i < columnas; i++) {
-          var index = Math.floor(Math.random() * (5 - 1)) + 1;
-          var elemento = $('<img src="image/'+index+'.png" class="elemento" data-item="bloque-'+index+'" />');
-          $('.col-'+(j+1)).prepend(elemento);
+  agregarFichas: function(){
+    //clearInterval(interval);
+    if(banderaF==true && banderaC ==true){
+        for (var j = 0; j < columnas; j++) {
+          var col = $('.col-'+(j+1)+' > img');
+          for (var i = col.length; i < columnas; i++) {
+            var index = Math.floor(Math.random() * (5 - 1)) + 1;
+            var elemento = $('<img src="image/'+index+'.png" class="elemento" data-item="bloque-'+index+'" />');
+            $('.col-'+(j+1)).prepend(elemento);
+            seal.agrEventos(elemento);
+          }
         }
+        var i=0;
+        var j=-1;
+        $('.elemento').each(function(index, el) {
+          if(index%columnas == 0){
+            j++;
+            i=0;
+          }else{
+            i++;
+          }
+          $(el).attr('id',i+"-"+j);
+          tablero[i][j] = $(el);
+        });
+        banderaF=false;
+        banderaC=false;
+        seal.validarFilas();
+        seal.validarColumnas();
       }
-      var i=0;
-      var j=-1;
-      $('.elemento').each(function(index, el) {
-        if(index%columnas == 0){
-          j++;
-          i=0;
-        }else{
-          i++;
-        }
-        console.log(i,j);
-        $(el).attr('id',i+"-"+j);
-        tablero[i][j] = $(el);
-        //console.log(index,el);
-      });
-      console.log(tablero);
   }
 
-}
-
-function animacion(elemento){
-    elemento.fadeTo(500, .1)
-            .fadeTo(500, 1)
 }
