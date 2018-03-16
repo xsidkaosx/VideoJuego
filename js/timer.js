@@ -19,10 +19,27 @@ function initializeClock(id, endtime) {
   //var hoursSpan = clock.querySelector('.hours');
   var minutesSpan = clock.querySelector('.minutes');
   var secondsSpan = clock.querySelector('.seconds');
+  var pScore = document.getElementsByClassName('panel-score')[0];
+  var pTablero = document.getElementsByClassName('panel-tablero')[0];
+
+
+
+  $(pTablero).animate(
+    {
+      width: "70%"
+    },{
+      step: function(now, fx){
+        $(pScore).css('width','25%');
+      },
+      duration: 1000,
+      complete: function() {
+        $(pTablero).show();
+      }
+    }
+  );
 
   function updateClock() {
     var t = getTimeRemaining(endtime);
-
     //daysSpan.innerHTML = t.days;
     //hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
     minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
@@ -30,9 +47,6 @@ function initializeClock(id, endtime) {
 
     if (t.total <= 0) {
         clearInterval(timeinterval);
-        var pScore = document.getElementsByClassName('panel-score')[0];
-        var pTablero = document.getElementsByClassName('panel-tablero')[0];
-
         $(pTablero).animate(
           {
             width: "0%"
@@ -52,6 +66,3 @@ function initializeClock(id, endtime) {
   updateClock();
   var timeinterval = setInterval(updateClock, 1000);
 }
-
-var deadline = new Date(Date.parse(new Date()) + 2* 60 * 1000);
-initializeClock('timer', deadline);

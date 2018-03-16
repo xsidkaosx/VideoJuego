@@ -124,6 +124,18 @@ div[class^='col']{
   -webkit-animation-iteration-count: infinite;
 }
 
+.main-titulo {
+  animation-name: titulo;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  -webkit-animation-name:titulo;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+}
+
 @-moz-keyframes parpadeo{
   0% { opacity: 1.0; }
   50% { opacity: 0.0; }
@@ -140,4 +152,22 @@ div[class^='col']{
   0% { opacity: 1.0; }
    50% { opacity: 0.0; }
   100% { opacity: 1.0; }
+}
+
+@-moz-keyframes titulo{
+  0% { color: #DCFF0E; }
+  50% { color: #fff; }
+  100% { color: #DCFF0E; }
+}
+
+@-webkit-keyframes titulo {
+  0% { color: #DCFF0E; }
+  50% { color: #fff; }
+  100% { color: #DCFF0E; }
+}
+
+@keyframes titulo {
+  0% { color: #DCFF0E; }
+  50% { color: #fff; }
+  100% { color: #DCFF0E; }
 }

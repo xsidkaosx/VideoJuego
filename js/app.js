@@ -1,10 +1,3 @@
-$(document).ready(function(){
-    $('.btn-reinicio').on('click',function(){
-      this.innerHTML = 'Reiniciar';
-      Tablero.inicarJuego();
-    });
-})
-
 var filas = 7;
 var columnas = 7;
 var movimientos = 0;
@@ -14,8 +7,19 @@ var seal = null;
 var banderaF = false;
 var banderaC = false;
 var interval;
-var Tablero = {
 
+$(document).ready(function(){
+    $('.btn-reinicio').on('click',function(){
+      if(this.innerHTML == 'Iniciar'){
+        this.innerHTML = 'Reiniciar';
+        Tablero.inicarJuego();
+      }else{
+        Tablero.reiniciarJuego();
+      }
+    });
+});
+
+var Tablero = {
   inicarJuego: function(){
     seal = this;
     for (var i = 0; i < filas; i++) {
@@ -29,6 +33,8 @@ var Tablero = {
       }
       tablero[i] = fila;
     }
+    var deadline = new Date(Date.parse(new Date()) + 2* 60 * 1000);
+    initializeClock('timer', deadline);
     // Validar elementos
     this.validarColumnas();
     this.validarFilas();
@@ -41,6 +47,7 @@ var Tablero = {
       drop: function(event, ui ) {
         movimientos++;
         $('#movimientos-text').html(movimientos);
+
         var idItemA = ui.draggable.attr('id');
         var idItemB = $(this).attr('id');
         var posItemA = idItemA.split('-');
@@ -68,7 +75,6 @@ var Tablero = {
       var tmpPrev,tmpNext = null
       for (var j = 0; j < columnas; j++) {
           var actual = tablero[i][j];
-          tmpPrev = null
           if(j!=0){
             tmpPrev = tablero[i][j-1]
           }else {
@@ -178,6 +184,23 @@ var Tablero = {
         seal.validarFilas();
         seal.validarColumnas();
       }
+  },
+  reiniciarJuego: function(){
+    for (var i = 0; i < columnas; i++) {
+      $('.col-'+(i+1)).empty();
+    }
+    $('#movimientos-text').html('0');
+    $('#score-text').html('0');
+    filas = 7;
+    columnas = 7;
+    movimientos = 0;
+    score = 0;
+    tablero = [];
+    seal = null;
+    banderaF = false;
+    banderaC = false;
+    interval;
+    this.inicarJuego();
   }
 
 }
